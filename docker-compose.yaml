@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:latest
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: .
+      dockerfile: crud-backend/Dockerfile
+    container_name: backend
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+    ports:
+      - "8383:8383"
+    depends_on:
+      - db
+    command: bash -c "npx prisma migrate dev --name init && npm run dev"
+
+  frontend:
+    build:
+      context: .
+      dockerfile: crud-frontend/Dockerfile
+    container_name: frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
