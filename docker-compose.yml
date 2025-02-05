@@ -1,0 +1,41 @@
+services:
+  frontend:
+    build:
+      context: .  
+      dockerfile: crud-frontend/Dockerfile  
+    ports:
+      - "5173:5173"  
+    volumes:
+      - ./crud-frontend:/app
+      - /app/node_modules  
+    environment:
+      - VITE_API_URL=http://frontend:5173  
+    command: npm run dev
+    networks:
+      - fullstack-network
+
+  backend:
+    build:
+      context: .  # Контекст сборки, корень проекта
+      dockerfile: crud-backend/Dockerfile  # Путь до Dockerfile для бэкенда
+    ports:
+      - "8383:8383"  # Порты для бэкенда
+    env_file:
+      - ./crud-backend/.env  # Файл окружения для бэкенда
+    networks:
+      - fullstack-network  # Сеть, которую использует бэкенд
+
+  db:
+    image: postgres:alpine  # Используем официальный образ PostgreSQL
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: mydb
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data  # Монтирование данных базы данных
+    networks:
+      - fullstack-network  # Сеть, которую использует база данных
+
+networks:
+  fullstack-network:
+    driver: bridge  # Используем мостовую сеть

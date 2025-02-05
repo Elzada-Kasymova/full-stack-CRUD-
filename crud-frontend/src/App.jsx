@@ -2,8 +2,8 @@
 import { useState, useEffect  } from 'react'
 import './App.css'
 import ModalForm from './components/Modalform'
-import NavBar from './components/Navbar'
-import TableList from './components/Tablelist'
+import NavBar from './components/NavBar';
+import TableList from './components/TableList';
 import axios from 'axios';
 
 function App() {
@@ -21,7 +21,7 @@ function App() {
           setTableData(response.data); // Set the fetched data
 
         } catch (err) {
-            setError(err.message);
+            console.error(err.message);
         }
     };
 
