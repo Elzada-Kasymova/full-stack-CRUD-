@@ -97,3 +97,7 @@ After completing the setup, the application is ready to use. Simply navigate to:
 - **Database**: PostgreSQL
 - **ORM**: Prisma
 
+## How It is look 
+
+![Picture of site ](./image/image.png)
+
